@@ -17,7 +17,7 @@ class Utils
      */
     public static function json(array $body)
     {
-        if(count($body) > 0) {
+        if (count($body) > 0) {
             return json_encode($body, JSON_FORCE_OBJECT);
         }
 

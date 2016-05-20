@@ -125,7 +125,7 @@ class HttpClient
         if ($body) {
             $request = $this->factory->createRequest($method, $path, $headers, $body);
         } else {
-            $request = $this->factory->createRequest($method, $path,  $headers);
+            $request = $this->factory->createRequest($method, $path, $headers);
         }
 
         return $this->httpClient->sendRequest($this->authentication->authenticate($request));

@@ -6,6 +6,7 @@ use Giphy\Api\Gif;
 use Giphy\Api\Sticker;
 use Giphy\Api\Upload;
 use Giphy\Http\HttpClient;
+use Giphy\Exceptions\InvalidArgumentException;
 
 /**
  * Class Client
@@ -79,7 +80,7 @@ class Client
     public function getHttpClient()
     {
         if (is_null($this->apiKey) && is_null($this->httpClient)) {
-            throw new \InvalidArgumentException("Either the API key or the HTTP client must be specified");
+            throw new InvalidArgumentException("Either the API key or the HTTP client must be specified");
         }
 
         if (null === $this->httpClient) {

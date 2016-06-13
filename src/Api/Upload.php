@@ -2,6 +2,8 @@
 
 namespace Giphy\Api;
 
+use Giphy\Exceptions\InvalidArgumentException;
+
 /**
  * Class Upload
  * @package Giphy\Api
@@ -12,11 +14,12 @@ class Upload extends Api
     /**
      * Upload a GIF by URL to Giphy.
      *
-     * @param string      $url
-     * @param string|null $username
-     * @param array       $tags
-     * @param string|null $source
-     * @param bool        $hidden
+     * @param  string      $url
+     * @param  string|null $username
+     * @param  array       $tags
+     * @param  string|null $source
+     * @param  bool        $hidden
+     * @return object
      */
     public function url($url, $username = null, array $tags = array(), $source = null, $hidden = true)
     {

@@ -43,7 +43,7 @@ class Client
      */
     public function gif()
     {
-        return new Gif($this);
+        return new Gif($this->getHttpClient());
     }
 
     /**
@@ -53,7 +53,7 @@ class Client
      */
     public function sticker()
     {
-        return new Sticker($this);
+        return new Sticker($this->getHttpClient());
     }
 
     /**
@@ -63,7 +63,7 @@ class Client
      */
     public function upload()
     {
-        return new Upload($this);
+        return new Upload($this->getHttpClient());
     }
 
     /**

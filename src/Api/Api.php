@@ -2,7 +2,7 @@
 
 namespace Giphy\Api;
 
-use Giphy\Client;
+use Giphy\Http\HttpClient;
 
 /**
  * Class Api
@@ -12,18 +12,18 @@ use Giphy\Client;
 abstract class Api
 {
     /**
-     * @var Client
+     * @var HttpClient
      */
-    protected $client;
+    protected $httpClient;
 
     /**
      * Api constructor.
      *
-     * @param Client $client
+     * @param HttpClient $httpClient
      */
-    public function __construct(Client $client)
+    public function __construct(HttpClient $httpClient)
     {
-        $this->client = $client;
+        $this->httpClient = $httpClient;
     }
 
     /**
@@ -37,7 +37,7 @@ abstract class Api
      */
     protected function get($path, array $parameters = array(), array $headers = array())
     {
-        $response = $this->client->getHttpClient()->get(
+        $response = $this->httpClient->get(
             $path,
             $parameters,
             $headers
@@ -81,7 +81,7 @@ abstract class Api
      */
     protected function postRaw($path, $body, array $headers = array())
     {
-        $response = $this->client->getHttpClient()->post(
+        $response = $this->httpClient->post(
             $path,
             $body,
             $headers

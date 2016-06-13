@@ -2,6 +2,9 @@
 
 namespace Giphy\Http;
 
+use Giphy\Exceptions\ClientErrorException;
+use Giphy\Exceptions\ServerErrorException;
+use Http\Client\Common\PluginClient;
 use Http\Client\HttpClient as BaseClient;
 use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\MessageFactoryDiscovery;
@@ -122,12 +125,22 @@ class HttpClient
             'User-Agent' => self::HTTP_AGENT,
         ], $headers);
 
-        if ($body) {
-            $request = $this->factory->createRequest($method, $path, $headers, $body);
-        } else {
-            $request = $this->factory->createRequest($method, $path, $headers);
+        $request = $this->factory->createRequest($method, $path, $headers, $body);
+        $response = $this->httpClient->sendRequest($this->authentication->authenticate($request));
+
+        if ($response->getHeader('Content-Type') === ['application/json']) {
+            $body = json_decode($response->getBody()->getContents());
+            $statusCode = $body->meta->status;
+
+            if ($statusCode >= 400 && $statusCode < 500) {
+                throw new ClientErrorException($body->meta->msg, $request, $response);
+            }
+
+            if ($statusCode >= 500 && $statusCode < 600) {
+                throw new ServerErrorException($body->meta->msg, $request, $response);
+            }
         }
 
-        return $this->httpClient->sendRequest($this->authentication->authenticate($request));
+        return $response;
     }
 }

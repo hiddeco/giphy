@@ -43,11 +43,13 @@ abstract class Api
             $headers
         );
 
+        $body = $response->getBody()->getContents();
+
         if ($response->getHeader('Content-Type') === ['application/json']) {
-            return json_decode($response->getBody()->getContents());
+            $body = json_decode($body);
         }
 
-        return $response->getBody()->getContents();
+        return $body;
     }
 
     /**

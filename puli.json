@@ -69,6 +69,10 @@
             "installer": "composer",
             "env": "dev"
         },
+        "php-http/client-common": {
+            "install-path": "vendor/php-http/client-common",
+            "installer": "composer"
+        },
         "php-http/discovery": {
             "install-path": "vendor/php-http/discovery",
             "installer": "composer"
@@ -80,8 +84,7 @@
         },
         "php-http/httplug": {
             "install-path": "vendor/php-http/httplug",
-            "installer": "composer",
-            "env": "dev"
+            "installer": "composer"
         },
         "php-http/message": {
             "install-path": "vendor/php-http/message",
@@ -93,8 +96,7 @@
         },
         "php-http/promise": {
             "install-path": "vendor/php-http/promise",
-            "installer": "composer",
-            "env": "dev"
+            "installer": "composer"
         },
         "phpcollection/phpcollection": {
             "install-path": "vendor/phpcollection/phpcollection",
@@ -249,6 +251,10 @@
             "install-path": "vendor/symfony/filesystem",
             "installer": "composer",
             "env": "dev"
+        },
+        "symfony/options-resolver": {
+            "install-path": "vendor/symfony/options-resolver",
+            "installer": "composer"
         },
         "symfony/polyfill-mbstring": {
             "install-path": "vendor/symfony/polyfill-mbstring",

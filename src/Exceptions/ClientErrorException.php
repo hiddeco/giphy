@@ -10,4 +10,5 @@ use Http\Client\Exception\HttpException;
  * @author  Hidde Beydals <hello@hidde.co>
  */
 class ClientErrorException extends HttpException
-{}
+{
+}

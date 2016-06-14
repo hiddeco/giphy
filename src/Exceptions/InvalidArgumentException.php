@@ -8,4 +8,5 @@ namespace Giphy\Exceptions;
  * @author  Hidde Beydals <hello@hidde.co>
  */
 class InvalidArgumentException extends \InvalidArgumentException
-{}
+{
+}

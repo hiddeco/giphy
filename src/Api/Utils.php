@@ -23,4 +23,9 @@ class Utils
 
         return null;
     }
+
+    public static function camelCase($string)
+    {
+        return lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $string))));
+    }
 }

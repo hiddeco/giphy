@@ -2,8 +2,6 @@
 
 namespace Giphy\Api;
 
-use Giphy\Exceptions\InvalidArgumentException;
-
 /**
  * Class Upload
  * @package Giphy\Api

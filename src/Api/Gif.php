@@ -16,19 +16,23 @@ class Gif extends Api
      * @param int         $limit
      * @param int         $offset
      * @param string|null $rating
-     * @param string      $format
      *
-     * @return \Psr\Http\Message\StreamInterface
+     * @return array|\Giphy\Entity\Gif[]
      */
-    public function search($query, $limit = 25, $offset = 0, $rating = null, $format = 'json')
+    public function search($query, $limit = 25, $offset = 0, $rating = null)
     {
-        return $this->get('gifs/search', array(
+        $results = $this->get('gifs/search', array(
             'q' => $query,
             'limit' => $limit,
             'offset' => $offset,
-            'rating' => $rating,
-            'fmt' => $format
+            'rating' => $rating
         ));
+
+        $this->extractPagination($results);
+
+        return array_map(function ($gif) {
+            return new \Giphy\Entity\Gif($gif);
+        }, $results->data);
     }
 
     /**
@@ -36,17 +40,25 @@ class Gif extends Api
      *
      * @param string|array $id
      *
-     * @return \Psr\Http\Message\StreamInterface
+     * @return \Giphy\Entity\Gif|array|\Giphy\Entity\Gif[]
      */
     public function find($id)
     {
-        if (is_array($id)) {
-            return $this->get('gifs', array(
-                'ids' => $id
-            ));
+        $this->pagination = null;
+
+        if (!is_array($id)) {
+            $gif = $this->get('gifs/' . urlencode($id));
+
+            return new \Giphy\Entity\Gif($gif->data);
         }
 
-        return $this->get('gifs/' . urlencode($id));
+        $gifs = $this->get('gifs', array(
+            'ids' => implode(',', $id)
+        ));
+
+        return array_map(function ($gif) {
+            return new \Giphy\Entity\Gif($gif);
+        }, $gifs->data);
     }
 
     /**
@@ -55,17 +67,19 @@ class Gif extends Api
      *
      * @param string      $query
      * @param null|string $rating
-     * @param string      $format
      *
-     * @return \Psr\Http\Message\StreamInterface
+     * @return \Giphy\Entity\Gif
      */
-    public function translate($query, $rating = null, $format = 'json')
+    public function translate($query, $rating = null)
     {
-        return $this->get('gifs/translate', array(
+        $translation = $this->get('gifs/translate', array(
             's' => $query,
             'rating' => $rating,
-            'fmt' => $format
         ));
+
+        $this->pagination = null;
+
+        return new \Giphy\Entity\Gif($translation->data);
     }
 
     /**
@@ -73,17 +87,19 @@ class Gif extends Api
      *
      * @param null|string $tag
      * @param null|string $rating
-     * @param string      $format
      *
-     * @return \Psr\Http\Message\StreamInterface
+     * @return \Giphy\Entity\Roulette
      */
-    public function random($tag = null, $rating = null, $format = 'json')
+    public function random($tag = null, $rating = null)
     {
-        return $this->get('gifs/random', array(
+        $gif = $this->get('gifs/random', array(
             'tag' => $tag,
-            'rating' => $rating,
-            'fmt' => $format
+            'rating' => $rating
         ));
+
+        $this->pagination = null;
+
+        return new \Giphy\Entity\Roulette($gif->data);
     }
 
     /**
@@ -91,16 +107,20 @@ class Gif extends Api
      *
      * @param int    $limit
      * @param null   $rating
-     * @param string $format
      *
-     * @return \Psr\Http\Message\StreamInterface
+     * @return array|\Giphy\Entity\Gif[]
      */
-    public function trending($limit = 25, $rating = null, $format = 'json')
+    public function trending($limit = 25, $rating = null)
     {
-        return $this->get('gifs/trending', array(
+        $trending = $this->get('gifs/trending', array(
             'limit' => $limit,
-            'rating' => $rating,
-            'format' => $format
+            'rating' => $rating
         ));
+
+        $this->pagination = null;
+
+        return array_map(function ($gif) {
+            return new \Giphy\Entity\Gif($gif);
+        }, $trending->data);
     }
 }

@@ -2,6 +2,9 @@
 
 namespace Giphy\Api;
 
+use Giphy\Entity\Gif as GifEntity;
+use Giphy\Entity\Roulette as RouletteEntity;
+
 /**
  * Class Sticker
  * @package Giphy\Api
@@ -16,19 +19,23 @@ class Sticker extends Api
      * @param int         $limit
      * @param int         $offset
      * @param string|null $rating
-     * @param string      $format
      *
-     * @return \Psr\Http\Message\StreamInterface
+     * @return GifEntity
      */
-    public function search($query, $limit = 25, $offset = 0, $rating = null, $format = 'json')
+    public function search($query, $limit = 25, $offset = 0, $rating = null)
     {
-        return $this->get('stickers/search', array(
+        $results = $this->get('stickers/search', array(
             'q' => $query,
             'limit' => $limit,
             'offset' => $offset,
-            'rating' => $rating,
-            'fmt' => $format
+            'rating' => $rating
         ));
+
+        $this->extractPagination($results);
+
+        return array_map(function ($gif) {
+            return new GifEntity($gif);
+        }, $results->data);
     }
 
     /**
@@ -37,17 +44,19 @@ class Sticker extends Api
      *
      * @param string      $query
      * @param null|string $rating
-     * @param string      $format
      *
-     * @return \Psr\Http\Message\StreamInterface
+     * @return Gif
      */
-    public function translate($query, $rating = null, $format = 'json')
+    public function translate($query, $rating = null)
     {
-        return $this->get('stickers/translate', array(
+        $translation = $this->get('stickers/translate', array(
             's' => $query,
             'rating' => $rating,
-            'fmt' => $format
         ));
+
+        $this->pagination = null;
+
+        return new GifEntity($translation->data);
     }
 
     /**
@@ -56,17 +65,19 @@ class Sticker extends Api
      *
      * @param null|string $tag
      * @param null|string $rating
-     * @param string      $format
      *
-     * @return \Psr\Http\Message\StreamInterface
+     * @return GifEntity
      */
-    public function random($tag = null, $rating = null, $format = 'json')
+    public function random($tag = null, $rating = null)
     {
-        return $this->get('stickers/random', array(
+        $gif = $this->get('stickers/random', array(
             'tag' => $tag,
-            'rating' => $rating,
-            'fmt' => $format
+            'rating' => $rating
         ));
+
+        $this->pagination = null;
+
+        return new RouletteEntity($gif->data);
     }
 
     /**
@@ -74,16 +85,20 @@ class Sticker extends Api
      *
      * @param int    $limit
      * @param null   $rating
-     * @param string $format
      *
      * @return \Psr\Http\Message\StreamInterface
      */
-    public function trending($limit = 25, $rating = null, $format = 'json')
+    public function trending($limit = 25, $rating = null)
     {
-        return $this->get('stickers/trending', array(
+        $trending = $this->get('stickers/trending', array(
             'limit' => $limit,
-            'rating' => $rating,
-            'format' => $format
+            'rating' => $rating
         ));
+
+        $this->pagination = null;
+
+        return array_map(function ($gif) {
+            new GifEntity($gif);
+        }, $trending->data);
     }
 }

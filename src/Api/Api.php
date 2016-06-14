@@ -2,6 +2,7 @@
 
 namespace Giphy\Api;
 
+use Giphy\Entity\Pagination;
 use Giphy\Http\HttpClient;
 
 /**
@@ -17,6 +18,11 @@ abstract class Api
     protected $httpClient;
 
     /**
+     * @var Pagination
+     */
+    protected $pagination;
+
+    /**
      * Api constructor.
      *
      * @param HttpClient $httpClient
@@ -24,6 +30,16 @@ abstract class Api
     public function __construct(HttpClient $httpClient)
     {
         $this->httpClient = $httpClient;
+    }
+
+    /**
+     * Return the Pagination.
+     *
+     * @return Pagination|null
+     */
+    public function getPagination()
+    {
+        return $this->pagination;
     }
 
     /**
@@ -43,7 +59,7 @@ abstract class Api
             $headers
         );
 
-        $body = $response->getBody()->getContents();
+        $body = (string) $response->getBody();
 
         if ($response->getHeader('Content-Type') === ['application/json']) {
             $body = json_decode($body);
@@ -63,13 +79,15 @@ abstract class Api
      */
     protected function post($path, array $parameters = array(), array $headers = array())
     {
-        return json_decode($this->postRaw(
+        $response = $this->postRaw(
             $path,
             http_build_query($parameters, null, '&'),
             array_merge($headers, array(
                 'Content-Type' => 'application/x-www-form-urlencoded'
             ))
-        )->getContents());
+        );
+
+        return json_decode((string) $response);
     }
 
     /**
@@ -90,5 +108,21 @@ abstract class Api
         );
 
         return $response->getBody();
+    }
+
+    /**
+     * Extract the pagination data from the response.
+     *
+     * @param \StdClass $response
+     *
+     * @return Pagination
+     */
+    protected function extractPagination(\StdClass $response)
+    {
+        if (isset($response->pagination)) {
+            $this->pagination = new Pagination($response->pagination);
+        }
+
+        return $this->pagination;
     }
 }

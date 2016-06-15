@@ -26,4 +26,13 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertJsonStringEqualsJsonString('{"foo":"bar","barDepth":{"fooKey":"FooValue"}}', $json);
     }
+
+    public function test_camelcase_returns_camelcase()
+    {
+        $string = "underscores_are_the_feature";
+
+        $camelCase = Utils::camelCase($string);
+
+        $this->assertSame('underscoresAreTheFeature', $camelCase);
+    }
 }

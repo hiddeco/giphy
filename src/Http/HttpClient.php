@@ -4,7 +4,6 @@ namespace Giphy\Http;
 
 use Giphy\Exceptions\ClientErrorException;
 use Giphy\Exceptions\ServerErrorException;
-use Http\Client\Common\PluginClient;
 use Http\Client\HttpClient as BaseClient;
 use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\MessageFactoryDiscovery;

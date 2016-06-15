@@ -24,6 +24,12 @@ class Utils
         return null;
     }
 
+    /**
+     * Return camelcase version of a string.
+     *
+     * @param  $string
+     * @return string
+     */
     public static function camelCase($string)
     {
         return lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $string))));
